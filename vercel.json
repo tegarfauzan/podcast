@@ -1,0 +1,7 @@
+{
+    "builds": [
+        { "src": "index.html", "use": "@vercel/static" },
+        { "src": "doctor-search.html", "use": "@vercel/static" }
+    ],
+    "routes": [{ "src": "/doctor-search.html", "dest": "/doctor-search.html" }]
+}
