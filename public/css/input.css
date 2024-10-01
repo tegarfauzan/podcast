@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.active {
+    @apply bg-[#4E0F08] text-[#FFFFFF];
+}
+
+.nonactive {
+    @apply text-[rgba(148,153,174,0.4)];
+}

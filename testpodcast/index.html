@@ -12,11 +12,24 @@
             #progress-container {
                 width: 640px;
                 height: 10px;
-                background-color: #ddd;
+                background-color: #0db915;
                 margin-top: 20px;
                 cursor: pointer;
                 margin-bottom: 40px;
                 border-radius: 5px;
+                position: relative;
+            }
+
+            #progress-handle {
+                width: 16px;
+                height: 16px;
+                background-color: #ffffff;
+                border: 2px solid #d50707;
+                border-radius: 50%;
+                position: absolute;
+                top: -4px; /* Posisikan di atas progress bar */
+                left: 0; /* Mulai di kiri */
+                transform: translateX(-50%); /* Pusatkan handle di ujung progress */
             }
 
             #progress-bar {
@@ -43,6 +56,8 @@
         <!-- Custom progress bar container -->
         <div id="progress-container">
             <div id="progress-bar"></div>
+            <div id="progress-handle"></div>
+            <!-- Handle untuk progress bar -->
             <p>Current Time: <span id="current-time">0:00</span> / Total Duration: <span id="total-duration">0:00</span></p>
         </div>
         <button id="loop-button">Loop Video: Off</button>
@@ -93,6 +108,7 @@
             var playPauseButton = document.getElementById("play-pause-button");
             var progressContainer = document.getElementById("progress-container");
             var progressBar = document.getElementById("progress-bar");
+            var progressHandle = document.getElementById("progress-handle");
             var backwardButton = document.getElementById("backward-button");
             var forwardButton = document.getElementById("forward-button");
             var isMouseDown = false;
@@ -134,45 +150,44 @@
                 player.currentTime(Math.min(newTime, player.duration())); // Ensure time doesn't go past the video length
             });
 
-            // Update progress bar based on current video time
+            // PROGRESS BAR
+            // Update progress bar and handle based on current video time
             player.on("timeupdate", function () {
                 if (!isMouseDown) {
-                    // Prevent progress from updating while dragging
                     var progress = (player.currentTime() / player.duration()) * 100;
                     progressBar.style.width = progress + "%";
+
+                    // Update posisi handle agar mengikuti progress bar
+                    var handlePosition = progressContainer.offsetWidth * (progress / 100);
+                    progressHandle.style.left = handlePosition + "px";
                 }
             });
+
             // Mouse down event to start dragging
             progressContainer.addEventListener("mousedown", function (e) {
                 isMouseDown = true;
-                var rect = progressContainer.getBoundingClientRect();
-                startX = e.clientX - rect.left; // Simpan posisi horizontal awal
-                updateProgress(e);
+                updateProgress(e); // Update langsung ketika mouse ditekan
             });
+
             // Mouse up event to stop dragging
             document.addEventListener("mouseup", function () {
                 isMouseDown = false;
             });
+
             // Mouse move event to update progress bar in real-time
             progressContainer.addEventListener("mousemove", function (e) {
                 if (isMouseDown) {
-                    // Pada mouse move, tetap gunakan posisi horizontal awal (startX)
-                    e.clientX = startX + (e.movementX || 0); // Gunakan pergeseran horizontal dari gerakan mouse
                     updateProgress(e);
                 }
             });
-            // Right-click handler (context menu block)
-            progressContainer.addEventListener("contextmenu", function (e) {
-                e.preventDefault(); // Prevent context menu from appearing
-                isMouseDown = true;
-                updateProgress(e);
-            });
+
             // Function to update progress and set video time
             function updateProgress(e) {
                 var rect = progressContainer.getBoundingClientRect();
                 var offsetX = e.clientX - rect.left;
                 var progress = Math.max(0, Math.min(1, offsetX / progressContainer.offsetWidth));
                 progressBar.style.width = progress * 100 + "%";
+                progressHandle.style.left = offsetX + "px";
                 player.currentTime(progress * player.duration());
             }
 
