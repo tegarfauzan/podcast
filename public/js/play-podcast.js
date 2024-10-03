@@ -148,7 +148,6 @@ function toggleMedia(mediaType) {
             player.playVideo();
         }
     }
-
     // Fungsi untuk memundurkan atau memajukan video
     function seekVideo(seconds) {
         const currentTime = player.getCurrentTime();
@@ -199,24 +198,19 @@ function toggleMedia(mediaType) {
 
     // Fungsi untuk mengubah progress bar saat mouse digeser
     function dragging(event) {
-        if (isDragging) {
-            seekOnDrag(event); // Panggil fungsi untuk memperbarui posisi
-        }
+        isDragging && seekOnDrag(event);
     }
 
     // Fungsi untuk menghentikan dragging
     function stopDragging(event) {
-        if (isDragging) {
-            seekOnDrag(event); // Panggil fungsi terakhir untuk menetapkan posisi final
-            isDragging = false; // Menghentikan dragging
-        }
+        isDragging && (seekOnDrag(event), (isDragging = false));
     }
 
     // Fungsi untuk mengubah progress berdasarkan posisi mouse saat drag
     function seekOnDrag(event) {
         const progressContainer = document.getElementById("progress-container");
         const rect = progressContainer.getBoundingClientRect();
-        const clickX = event.clientX - rect.left; // Posisi X relatif terhadap progress-container
+        const clickX = (event.touches ? event.touches[0].clientX : event.clientX) - rect.left; // Posisi X relatif terhadap progress-container
         const totalWidth = rect.width;
         const clickPercentage = Math.max(0, Math.min(clickX / totalWidth, 1)); // Batasi antara 0% hingga 100%
         const totalDuration = player.getDuration();
@@ -235,17 +229,24 @@ function toggleMedia(mediaType) {
     // Fungsi untuk mengaktifkan fullscreen
     function toggleFullscreen() {
         const videoPlayer = document.getElementById("video-player");
-        if (videoPlayer.requestFullscreen) {
-            videoPlayer.requestFullscreen();
-        } else if (videoPlayer.mozRequestFullScreen) {
-            // Firefox
-            videoPlayer.mozRequestFullScreen();
-        } else if (videoPlayer.webkitRequestFullscreen) {
-            // Chrome, Safari and Opera
-            videoPlayer.webkitRequestFullscreen();
-        } else if (videoPlayer.msRequestFullscreen) {
-            // IE/Edge
-            videoPlayer.msRequestFullscreen();
+        switch (true) {
+            case !!videoPlayer.requestFullscreen:
+                videoPlayer.requestFullscreen();
+                break;
+            case !!videoPlayer.mozRequestFullScreen:
+                // Firefox
+                videoPlayer.mozRequestFullScreen();
+                break;
+            case !!videoPlayer.webkitRequestFullscreen:
+                // Chrome, Safari and Opera
+                videoPlayer.webkitRequestFullscreen();
+                break;
+            case !!videoPlayer.msRequestFullscreen:
+                // IE/Edge
+                videoPlayer.msRequestFullscreen();
+                break;
+            default:
+                console.log("Fullscreen is not supported on this browser.");
         }
     }
 
