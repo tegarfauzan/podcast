@@ -1,7 +1,6 @@
 const layer = document.getElementById("layer");
 const subscription = document.getElementById("subscription");
 const locks = document.querySelectorAll(".lock");
-const gopremium = document.getElementById("go-premium");
 
 // TABS
 const swiperTabs = new Swiper(".swiper-tab", {
@@ -22,7 +21,7 @@ tabLinks.forEach((button) => {
         });
         // Remove active state from all buttons
         tabLinks.forEach((btn) => {
-            btn.classList.remove("text-[#1C1818]");
+            btn.classList.remove("text-[#1C1818]", "border-b", "border-[#EA4B0B]");
             btn.classList.add("text-[rgba(148,153,174,0.4)]");
         });
         // Show the target tab content
@@ -30,7 +29,7 @@ tabLinks.forEach((button) => {
         document.querySelector(targetTab).classList.add("flex");
 
         // Add active state to the clicked button
-        button.classList.add("text-[#1C1818]");
+        button.classList.add("text-[#1C1818]", "border-b", "border-[#EA4B0B]");
         button.classList.remove("text-[rgba(148,153,174,0.4)]");
     });
 });
@@ -43,7 +42,7 @@ locks.forEach((lock) => {
         layer.classList.remove("hidden");
 
         // Hapus class 'bottom-[487px]' dari elemen subscription
-        subscription.classList.remove("bottom-[487px]");
+        subscription.classList.remove("-bottom-[487px]");
 
         // Tambahkan class 'bottom-0' ke elemen subscription
         subscription.classList.add("bottom-0");
@@ -51,12 +50,13 @@ locks.forEach((lock) => {
 });
 
 // TOMBOL GO PREMIUM
-// Logika ketika 'gopremium' diklik
-gopremium.addEventListener("click", function () {
+// Logika ketika 'layer' diklik
+layer.addEventListener("click", function (event) {
+    event.preventDefault();
     // Tambahkan class 'hidden' ke elemen layer
     layer.classList.add("hidden");
     // Hapus class 'bottom-0' dari elemen subscription
     subscription.classList.remove("bottom-0");
     // Tambahkan class 'bottom-[487px]' ke elemen subscription
-    subscription.classList.add("bottom-[487px]");
+    subscription.classList.add("-bottom-[487px]");
 });

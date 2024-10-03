@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+    body {
+        @apply bg-[#DAE1E9];
+    }
+}
 .active {
     @apply bg-[#4E0F08] text-[#FFFFFF];
 }

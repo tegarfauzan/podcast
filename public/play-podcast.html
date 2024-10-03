@@ -11,170 +11,171 @@
         <link href="./css/output.css" rel="stylesheet" />
         <title>Play</title>
     </head>
-    <body class="bg-[#F4EEEF] font-popins">
-        <main class="relative mx-auto max-w-[640px] overflow-hidden">
-            <div id="Content-Container" class="w-full px-[25px] pb-5 pt-[60px]">
-                <div id="Tabs" class="swiper-tab mb-[30px] flex w-full items-center justify-between">
+    <body>
+        <main class="relative mx-auto h-screen max-w-[640px] overflow-hidden bg-[#F4EEEF] font-popins">
+            <section id="player" class="w-full px-[25px] pb-5 pt-[60px]">
+                <section class="mb-[30px] flex w-full items-center justify-between">
                     <img src="assets/play/icons/arrow-bottom.svg" alt="icon" />
-                    <div class="swiper-wrapper flex w-fit items-center justify-center rounded-[50px] border border-[rgba(255,255,255,0.4)] bg-[rgba(148,149,153,0.4)]">
-                        <div class="swiper-slide -mr-[11px] !w-fit">
-                            <button class="tab-link active rounded-[50px] px-4 py-2 text-xs font-bold leading-[18px]" data-target-tab="#Audio">Audio</button>
-                        </div>
-                        <div class="swiper-slide !w-fit">
-                            <button class="tab-link nonactive rounded-[50px] px-4 py-2 text-xs font-bold leading-[18px]" data-target-tab="#Video">Video</button>
+                    <div class="flex w-full justify-center">
+                        <div class="flex items-center justify-center rounded-[50px] border border-[rgba(255,255,255,0.4)] bg-[rgba(148,149,153,0.4)]">
+                            <button id="audio-tab" onclick="toggleMedia('audio')" class="active -mr-[11px] rounded-[50px] px-4 py-2 text-xs font-bold leading-[18px] transition-all duration-300">Audio</button>
+                            <button id="video-tab" onclick="toggleMedia('video')" class="nonactive rounded-[50px] px-4 py-2 text-xs font-bold leading-[18px] transition-all duration-300">Video</button>
                         </div>
                     </div>
                     <img src="assets/play/icons/mini-player.svg" alt="icon" />
-                </div>
-                <div id="TabsContent">
-                    <div id="Audio" class="tab-content">
+                </section>
+                <section>
+                    <div id="audio-video" class="tab-content hidden">
                         <div class="w-full">
-                            <img src="assets/play/images/hero-audio.png" alt="icon" class="mx-auto mb-5 size-[260px] rounded-[20px]" />
+                            <div class="thumbnail">
+                                <div id="audio-player-container" class="mx-auto mb-5 size-[260px] overflow-hidden rounded-[20px]">
+                                    <img src="assets/play/images/hero-audio.png" alt="icon" />
+                                </div>
+                                <div id="video-player-container" class="relative mx-auto mb-5 hidden h-[260px] w-[343px] overflow-hidden rounded-[20px]">
+                                    <iframe id="video-player" class="h-full w-full" src="https://www.youtube.com/embed/Q2qVPTdywaA?enablejsapi=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                                    <div class="absolute bottom-0 left-0 flex h-10 w-full items-center justify-end gap-x-3 bg-[rgba(21,21,21,0.4)] pr-[14px] backdrop-blur">
+                                        <button type="button" id="resolution">
+                                            <img src="assets/play/icons/resolution.svg" alt="icon" />
+                                        </button>
+                                        <button type="button" id="fullscreen">
+                                            <img src="assets/play/icons/fullscreen.svg" alt="icon" />
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                             <h1 class="mb-2 text-center text-xl font-bold leading-[30px] text-[#1C1818]">Hedgehog Hustle</h1>
                             <div class="mb-[23px] flex items-center justify-center gap-x-3">
                                 <h2 class="font-medium leading-6 text-[#1C1818]">Pickly Pals</h2>
                                 <p class="text-[13px] font-medium leading-5 text-[#9499AE]">49,3k</p>
                                 <img src="assets/play/icons/subscribe.svg" alt="icon" />
                             </div>
-
-                            <div>
-                                <div class="flex items-center justify-between">
-                                    <span id="current-time" class="text-[13px] font-medium leading-5 text-[#1C1818]">00:12</span>
-                                    <span id="total-duration" class="text-[13px] font-medium leading-5 text-[#1C1818]">01:06:24</span>
+                            <section id="audio">
+                                <div id="time" class="mb-2 flex items-center justify-between">
+                                    <span id="current-time" class="text-[13px] font-medium leading-5 text-[#1C1818]">00:00</span>
+                                    <span id="total-duration" class="text-[13px] font-medium leading-5 text-[#1C1818]">00:00</span>
                                 </div>
-                                <div class="relative h-3 w-full">
-                                    <div id="progress-container" class="h-[6px] w-full rounded-full bg-[rgba(110,142,41,0.2)]"></div>
-                                    <div id="progress-bar"></div>
-                                    <div id="progress-handle"></div>
+                                <div id="progress" class="relative mb-5 flex h-3 w-full items-center">
+                                    <div id="progress-container" class="h-[6px] w-full cursor-pointer rounded-full bg-[rgba(110,142,41,0.2)]">
+                                        <div id="progress-bar" class="z-10 h-[6px] w-0 rounded-full bg-[#6E8E29]"></div>
+                                        <div id="progress-handle" class="absolute top-0 z-20 h-3 w-3 -translate-x-1/2 rounded-full border-[1.5px] border-[#6E8E29] bg-[#FFFFFF]"></div>
+                                    </div>
                                 </div>
+                                <div id="control" class="flex items-center justify-around">
+                                    <button type="button" class="relative">
+                                        <img src="assets/play/icons/continue-not.svg" alt="icon" />
+                                        <img src="assets/play/icons/continue-yes.svg" alt="icon" id="continue" class="absolute left-0 top-0 z-10 opacity-0 transition-all duration-300" />
+                                    </button>
+                                    <button type="button" id="previous">
+                                        <img src="assets/play/icons/previous.svg" alt="icon" />
+                                    </button>
+                                    <button type="button" id="play-pause">
+                                        <img src="assets/play/icons/play.svg" alt="icon" />
+                                    </button>
+                                    <button type="button" id="next">
+                                        <img src="assets/play/icons/after.svg" alt="icon" />
+                                    </button>
+                                    <button type="button" id="download">
+                                        <img src="assets/play/icons/download.svg" alt="icon" />
+                                    </button>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </section>
+            </section>
+            <section id="other-episodes" class="absolute -bottom-[336px] left-0 z-20 w-full cursor-grab rounded-t-[32px] bg-gradient-to-b from-[#FFB640] to-[#FFC569] pt-5">
+                <h3 class="mb-3 px-[25px] font-bold leading-5 text-[#1C1818]">Other Episodes</h3>
+                <div class="h-full w-full space-y-4 rounded-t-[24px] bg-[#2F180A] px-[25px] py-5">
+                    <hr class="mx-auto w-[40px] rounded-full border-[2px] border-[#AE9587]" />
+                    <div class="cards h-[264px] space-y-3 overflow-y-auto">
+                        <div class="card w-full">
+                            <div class="flex items-center justify-between rounded-xl pr-[14px]">
+                                <div class="flex items-center gap-[14px]">
+                                    <div class="relative flex h-[80px] w-[100px] items-center justify-center overflow-hidden rounded-2xl">
+                                        <img src="assets/index/images/video3.png" alt="image" class="h-full w-full object-cover" />
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold leading-6 text-[#FFFFFF]">Cunning Canine</h3>
+                                        <p class="text-[10px] text-sm leading-6 tracking-[0.35px] text-[#FFFFFF]">Forest Foxes</p>
+                                        <div class="flex items-center gap-x-1">
+                                            <img src="assets/play/icons/clock.svg" alt="icon" />
+                                            <p class="text-[11px] leading-4 tracking-[0.66%] text-[#FFFFFF]">78 menit</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a href="play-podcast.html">
+                                    <img src="assets/index/icons/play.svg" alt="icon" class="shrink-0" />
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card w-full">
+                            <div class="flex items-center justify-between rounded-xl pr-[14px]">
+                                <div class="flex items-center gap-[14px]">
+                                    <div class="relative flex h-[80px] w-[100px] items-center justify-center overflow-hidden rounded-2xl">
+                                        <img src="assets/index/images/video3.png" alt="image" class="h-full w-full object-cover" />
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold leading-6 text-[#FFFFFF]">Cunning Canine</h3>
+                                        <p class="text-[10px] text-sm leading-6 tracking-[0.35px] text-[#FFFFFF]">Forest Foxes</p>
+                                        <div class="flex items-center gap-x-1">
+                                            <img src="assets/play/icons/clock.svg" alt="icon" />
+                                            <p class="text-[11px] leading-4 tracking-[0.66%] text-[#FFFFFF]">78 menit</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a href="play-podcast.html">
+                                    <img src="assets/index/icons/play.svg" alt="icon" class="shrink-0" />
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card w-full">
+                            <div class="flex items-center justify-between rounded-xl pr-[14px]">
+                                <div class="flex items-center gap-[14px]">
+                                    <div class="relative flex h-[80px] w-[100px] items-center justify-center overflow-hidden rounded-2xl">
+                                        <img src="assets/index/images/video3.png" alt="image" class="h-full w-full object-cover" />
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold leading-6 text-[#FFFFFF]">Cunning Canine</h3>
+                                        <p class="text-[10px] text-sm leading-6 tracking-[0.35px] text-[#FFFFFF]">Forest Foxes</p>
+                                        <div class="flex items-center gap-x-1">
+                                            <img src="assets/play/icons/clock.svg" alt="icon" />
+                                            <p class="text-[11px] leading-4 tracking-[0.66%] text-[#FFFFFF]">78 menit</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a href="play-podcast.html">
+                                    <img src="assets/index/icons/play.svg" alt="icon" class="shrink-0" />
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card w-full">
+                            <div class="flex items-center justify-between rounded-xl pr-[14px]">
+                                <div class="flex items-center gap-[14px]">
+                                    <div class="relative flex h-[80px] w-[100px] items-center justify-center overflow-hidden rounded-2xl">
+                                        <img src="assets/index/images/video3.png" alt="image" class="h-full w-full object-cover" />
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold leading-6 text-[#FFFFFF]">Cunning Canine</h3>
+                                        <p class="text-[10px] text-sm leading-6 tracking-[0.35px] text-[#FFFFFF]">Forest Foxes</p>
+                                        <div class="flex items-center gap-x-1">
+                                            <img src="assets/play/icons/clock.svg" alt="icon" />
+                                            <p class="text-[11px] leading-4 tracking-[0.66%] text-[#FFFFFF]">78 menit</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a href="play-podcast.html">
+                                    <img src="assets/index/icons/play.svg" alt="icon" class="shrink-0" />
+                                </a>
                             </div>
                         </div>
                     </div>
-                    <div id="Video" class="tab-content hidden">
-                        <div class="space-y-3">
-                            <div class="s1-card">
-                                <div class="flex items-center justify-between rounded-xl bg-[#F8F8F8] pr-[14px]">
-                                    <div class="flex items-center gap-[14px]">
-                                        <div class="relative flex h-[80px] w-[100px] items-center justify-center overflow-hidden rounded-xl">
-                                            <img src="assets/index/images/video3.png" alt="image" class="h-full w-full object-cover" />
-                                        </div>
-                                        <div>
-                                            <p class="text-[10px] leading-[16px] tracking-[0.66%] text-[#9499AE]">September 9, 2024</p>
-                                            <h3 class="mb-1 text-sm font-semibold leading-6 text-[#1C1818]">A Cup of Inspiration</h3>
-                                            <img src="assets/index/icons/download.svg" alt="image" class="shrink-0" />
-                                        </div>
-                                    </div>
-                                    <a href="play-podcast.html">
-                                        <img src="assets/index/icons/play.svg" alt="icon" class="shrink-0" />
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="s1-card">
-                                <div class="flex items-center justify-between rounded-xl bg-[#F8F8F8] pr-[14px]">
-                                    <div class="flex items-center gap-[14px]">
-                                        <div class="relative flex h-[80px] w-[100px] items-center justify-center overflow-hidden rounded-xl">
-                                            <img src="assets/index/images/video1.png" alt="image" class="h-full w-full object-cover" />
-                                            <img src="assets/index/images/premium.png" alt="image" class="absolute left-[5px] top-[5px] w-[54px] shrink-0 shadow-[0_2px_10px_0_rgba(253,154,1,0.5)]" />
-                                        </div>
-                                        <div>
-                                            <p class="text-[10px] leading-[16px] tracking-[0.66%] text-[#9499AE]">September 9, 2024</p>
-                                            <h3 class="mb-1 text-sm font-semibold leading-6 text-[#1C1818]">Cunning Canine</h3>
-                                            <img src="assets/index/images/open.png" alt="image" class="w-[126px] shrink-0" />
-                                        </div>
-                                    </div>
-                                    <img src="assets/index/icons/locked.svg" alt="icon" class="lock shrink-0" />
-                                </div>
-                            </div>
-                            <div class="s1-card">
-                                <div class="flex items-center justify-between rounded-xl bg-[#F8F8F8] pr-[14px]">
-                                    <div class="flex items-center gap-[14px]">
-                                        <div class="relative flex h-[80px] w-[100px] items-center justify-center overflow-hidden rounded-xl">
-                                            <img src="assets/index/images/video3.png" alt="image" class="h-full w-full object-cover" />
-                                        </div>
-                                        <div>
-                                            <p class="text-[10px] leading-[16px] tracking-[0.66%] text-[#9499AE]">September 9, 2024</p>
-                                            <h3 class="mb-1 text-sm font-semibold leading-6 text-[#1C1818]">A Cup of Inspiration</h3>
-                                            <img src="assets/index/icons/download.svg" alt="image" class="shrink-0" />
-                                        </div>
-                                    </div>
-                                    <a href="play-podcast.html">
-                                        <img src="assets/index/icons/play.svg" alt="icon" class="shrink-0" />
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <hr class="mx-auto w-[120px] rounded-full border-[2px] border-[#AE9587]" />
                 </div>
-            </div>
-
-            <!-- <section id="subscription" class="absolute -bottom-[487px] left-0 z-20 w-full transition-all duration-700 ease-in-out">
-                <form action="">
-                    <div class="h-[487px] w-full space-y-5 rounded-t-[32px] bg-[#2F180A] px-[25px] py-[20px]">
-                        <hr class="mx-auto w-[40px] rounded-full border-[2px] border-[#FFB139]" />
-                        <h3 class="font-bold leading-6 text-[#FFFFFF]">Get Premium</h3>
-                        <div class="cards flex items-center justify-between">
-                            <div class="card h-[120px] w-[106.33px] overflow-hidden rounded-xl bg-[#F8F8F8]">
-                                <span class="flex h-[28px] w-full items-center justify-center bg-[rgba(234,75,11,0.2)] text-sm font-semibold leading-[21px] text-[#EA4B0B]">Lite</span>
-                                <div class="pt-[10px]">
-                                    <p class="text-center text-[10px] font-medium leading-4 tracking-[0.66%] text-[#9499AE]">monthly</p>
-                                    <div class="flex items-start justify-center gap-x-[1px]">
-                                        <img src="assets/index/icons/rp.svg" alt="icon" />
-                                        <strong class="h-5 font-bold leading-5 text-[#1C1818]">19.989</strong>
-                                    </div>
-                                    <img src="assets/index/icons/true-off.svg" alt="icon" class="mx-auto mt-3" />
-                                </div>
-                            </div>
-                            <div class="card h-[120px] w-[106.33px] overflow-hidden rounded-xl bg-[#F8F8F8]">
-                                <span class="flex h-[28px] w-full items-center justify-center bg-[rgba(234,75,11,0.2)] text-xs font-semibold leading-[18px] text-[#EA4B0B]">Premium</span>
-                                <div class="pt-[10px]">
-                                    <p class="text-center text-[10px] font-medium leading-4 tracking-[0.66%] text-[#9499AE]">monthly</p>
-                                    <div class="flex items-start justify-center gap-x-[1px]">
-                                        <img src="assets/index/icons/rp.svg" alt="icon" />
-                                        <strong class="h-5 font-bold leading-5 text-[#1C1818]">24.989</strong>
-                                    </div>
-                                    <img src="assets/index/icons/true-off.svg" alt="icon" class="mx-auto mt-3" />
-                                </div>
-                            </div>
-                            <div class="card shadow-[5px_4px_10px_0_rgba(234, 75, 11,0.25)] h-[120px] w-[106.33px] overflow-hidden rounded-xl border border-[#EA4B0B] bg-[#F8F8F8]">
-                                <span class="flex h-[28px] w-full items-center justify-center bg-[#EA4B0B] text-xs font-semibold leading-[18px] text-[#FFFFFF]">Pro</span>
-                                <div class="pt-[10px]">
-                                    <p class="text-center text-[10px] font-medium leading-4 tracking-[0.66%] text-[#9499AE]">monthly</p>
-                                    <div class="flex items-start justify-center gap-x-[1px]">
-                                        <img src="assets/index/icons/rp.svg" alt="icon" />
-                                        <strong class="h-5 font-bold leading-5 text-[#EA4B0B]">49.989</strong>
-                                    </div>
-                                    <img src="assets/index/icons/true-on.svg" alt="icon" class="mx-auto mt-3" />
-                                </div>
-                            </div>
-                        </div>
-                        <article>
-                            <h3 class="mb-[9.5px] font-bold leading-6 text-[#FFFFFF]">Benefit</h3>
-                            <div class="space-y-2">
-                                <div class="flex items-center gap-2">
-                                    <img src="assets/index/icons/flag.svg" alt="icon" />
-                                    <p class="text-sm font-semibold leading-6 text-[#FFFFFF]">Enjoy ad-free content</p>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <img src="assets/index/icons/cup.svg" alt="icon" />
-                                    <p class="text-sm font-semibold leading-6 text-[#FFFFFF]">Get exclusive access to VIP content</p>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <img src="assets/index/icons/video.svg" alt="icon" />
-                                    <p class="text-sm font-semibold leading-6 text-[#FFFFFF]">Watch more videos</p>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <img src="assets/index/icons/downloads.svg" alt="icon" />
-                                    <p class="text-sm font-semibold leading-6 text-[#FFFFFF]">Download and watch offline</p>
-                                </div>
-                            </div>
-                        </article>
-                        <button id="go-premium" type="submit" class="w-full rounded-full bg-[#6E8E29] py-3 font-bold leading-6 text-[#FFFFFF] shadow-[0_4px_10px_0_rgba(110,142,41,0.5)]">Go Premium</button>
-                        <hr class="mx-auto w-[120px] rounded-full border-[2px] border-[#FFB139]" />
-                    </div>
-                </form>
-            </section> -->
+            </section>
         </main>
-        <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+        <script src="https://www.youtube.com/iframe_api"></script>
+        <script></script>
         <script src="js/play-podcast.js"></script>
     </body>
 </html>

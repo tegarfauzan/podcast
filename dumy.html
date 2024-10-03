@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Swipe Box</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <style>
+            #box {
+                transition: transform 0.2s ease-out;
+            }
+        </style>
+    </head>
+    <body class="h-screen bg-[#F4EEEF] font-popins">
+        <div class="relative h-screen w-full bg-red-400">
+            <div id="box" class="absolute bottom-0 left-1/2 z-50 flex h-[150px] w-full -translate-x-1/2 items-center justify-center bg-green-700 text-center">
+                <h1 class="text-lg font-bold">Swipe me up!</h1>
+            </div>
+        </div>
+
+        <script>
+            const box = document.getElementById("box");
+            let startY,
+                currentY = 0;
+            let isDragging = false;
+
+            // Maximum swipe height: half the screen
+            const maxHeight = window.innerHeight / 2;
+
+            // Mouse down (start dragging)
+            box.addEventListener("mousedown", (e) => {
+                startY = e.clientY;
+                isDragging = true;
+            });
+
+            // Mouse move (while dragging)
+            window.addEventListener("mousemove", (e) => {
+                if (!isDragging) return;
+
+                const mouseY = e.clientY;
+                const distance = startY - mouseY;
+
+                if (distance > 0) {
+                    // Restrict movement to upward drag only
+                    const newY = Math.min(distance, maxHeight);
+                    box.style.transform = `translateY(-${newY}px)`;
+                    currentY = newY;
+                }
+            });
+
+            // Mouse up (end dragging)
+            window.addEventListener("mouseup", () => {
+                if (!isDragging) return;
+                isDragging = false;
+                // Snap to original position or half-screen
+                if (currentY < maxHeight / 2) {
+                    box.style.transform = "translateY(0)";
+                } else {
+                    box.style.transform = `translateY(-${maxHeight}px)`;
+                }
+            });
+        </script>
+    </body>
+</html>
