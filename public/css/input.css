@@ -14,3 +14,13 @@
 .nonactive {
     @apply text-[rgba(148,153,174,0.4)];
 }
+
+/* Menyembunyikan scrollbar pada Webkit (Chrome, Safari) */
+.scroll-invisible::-webkit-scrollbar {
+    display: none; /* Sembunyikan scrollbar */
+}
+
+/* Menyembunyikan scrollbar pada Firefox */
+.scroll-invisible {
+    scrollbar-width: none; /* Sembunyikan scrollbar */
+}

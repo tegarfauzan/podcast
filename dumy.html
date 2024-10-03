@@ -3,61 +3,52 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Swipe Box</title>
-        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
         <style>
-            #box {
-                transition: transform 0.2s ease-out;
+            .swiper-container {
+                width: 100%;
+                height: 300px; /* Sesuaikan tinggi sesuai kebutuhan */
+                overflow: hidden; /* Sembunyikan konten yang melampaui */
+            }
+            .swiper-slide {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background: #009688; /* Warna latar belakang slide */
+                color: #fff;
+            }
+            .content {
+                width: 200%; /* Lebar konten untuk dapat di-scroll */
             }
         </style>
+        <title>Vertical Swiper</title>
     </head>
-    <body class="h-screen bg-[#F4EEEF] font-popins">
-        <div class="relative h-screen w-full bg-red-400">
-            <div id="box" class="absolute bottom-0 left-1/2 z-50 flex h-[150px] w-full -translate-x-1/2 items-center justify-center bg-green-700 text-center">
-                <h1 class="text-lg font-bold">Swipe me up!</h1>
+    <body>
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <div class="content">
+                        <!-- Ganti dengan konten yang diinginkan -->
+                        <h2>Konten di dalam kotak ini</h2>
+                        <p>Ini adalah deskripsi atau konten yang ingin Anda tampilkan.</p>
+                    </div>
+                </div>
             </div>
+            <div class="swiper-scrollbar"></div>
+            <!-- Scrollbar jika diperlukan -->
         </div>
 
+        <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
         <script>
-            const box = document.getElementById("box");
-            let startY,
-                currentY = 0;
-            let isDragging = false;
-
-            // Maximum swipe height: half the screen
-            const maxHeight = window.innerHeight / 2;
-
-            // Mouse down (start dragging)
-            box.addEventListener("mousedown", (e) => {
-                startY = e.clientY;
-                isDragging = true;
-            });
-
-            // Mouse move (while dragging)
-            window.addEventListener("mousemove", (e) => {
-                if (!isDragging) return;
-
-                const mouseY = e.clientY;
-                const distance = startY - mouseY;
-
-                if (distance > 0) {
-                    // Restrict movement to upward drag only
-                    const newY = Math.min(distance, maxHeight);
-                    box.style.transform = `translateY(-${newY}px)`;
-                    currentY = newY;
-                }
-            });
-
-            // Mouse up (end dragging)
-            window.addEventListener("mouseup", () => {
-                if (!isDragging) return;
-                isDragging = false;
-                // Snap to original position or half-screen
-                if (currentY < maxHeight / 2) {
-                    box.style.transform = "translateY(0)";
-                } else {
-                    box.style.transform = `translateY(-${maxHeight}px)`;
-                }
+            const swiper = new Swiper(".swiper-container", {
+                direction: "horizontal", // Arah gulir
+                slidesPerView: 1,
+                spaceBetween: 0,
+                scrollbar: {
+                    el: ".swiper-scrollbar",
+                    draggable: true,
+                },
+                // Pengaturan lainnya dapat ditambahkan sesuai kebutuhan
             });
         </script>
     </body>
