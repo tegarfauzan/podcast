@@ -261,13 +261,19 @@ let initialOffset;
 const maxTopOffset = window.innerHeight - 388; // Batas maksimal posisi top (window height - 388px)
 const minBottomOffset = window.innerHeight - 52; // Batas minimal posisi top (-bottom-[336px])
 
-// Ketika mouse di-klik (mulai drag)
-otherEpisodes.addEventListener("mousedown", (e) => {
+// Fungsi untuk memulai drag
+function startDrag(e) {
     isDragging = true;
-    startY = e.clientY;
+    startY = e.touches ? e.touches[0].clientY : e.clientY; // Dapatkan posisi sentuhan atau mouse
     initialOffset = otherEpisodes.offsetTop; // posisi awal elemen
     otherEpisodes.style.transition = "none"; // hentikan animasi
-});
+}
+
+// Ketika mouse di-klik (mulai drag)
+otherEpisodes.addEventListener("mousedown", startDrag);
+
+// Ketika sentuhan dimulai
+otherEpisodes.addEventListener("touchstart", startDrag);
 
 // Ketika mouse bergerak (saat drag)
 document.addEventListener("mousemove", (e) => {
@@ -289,8 +295,37 @@ document.addEventListener("mousemove", (e) => {
     }
 });
 
+// Ketika sentuhan bergerak (saat drag)
+document.addEventListener("touchmove", (e) => {
+    if (isDragging) {
+        const deltaY = e.touches[0].clientY - startY; // Dapatkan perubahan posisi sentuhan
+        let newOffset = initialOffset + deltaY;
+
+        // Batasi pergerakan hanya sampai batas maksimal (388px dari bawah)
+        if (newOffset < maxTopOffset) {
+            newOffset = maxTopOffset; // set agar tidak lebih tinggi dari batas maksimal
+        }
+
+        // Batasi pergerakan kebawah hanya sampai -bottom-[336px]
+        if (newOffset > minBottomOffset) {
+            newOffset = minBottomOffset; // set agar tidak lebih rendah dari batas minimal
+        }
+
+        otherEpisodes.style.top = `${newOffset}px`; // geser elemen secara vertikal
+        e.preventDefault(); // Mencegah scrolling saat drag
+    }
+});
+
 // Ketika mouse dilepaskan (akhir drag)
 document.addEventListener("mouseup", () => {
+    if (isDragging) {
+        isDragging = false;
+        otherEpisodes.style.transition = "top 0.3s"; // tambahkan kembali animasi jika dibutuhkan
+    }
+});
+
+// Ketika sentuhan dilepaskan (akhir drag)
+document.addEventListener("touchend", () => {
     if (isDragging) {
         isDragging = false;
         otherEpisodes.style.transition = "top 0.3s"; // tambahkan kembali animasi jika dibutuhkan
