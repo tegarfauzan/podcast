@@ -70,7 +70,7 @@ function toggleMedia(mediaType) {
     }
 
     function onPlayerReady(event) {
-        console.log("Player is ready");
+        console.log("Player is ready!");
 
         // Memperbarui progress sesingkat mungkin
         function updateProgress() {
@@ -80,10 +80,6 @@ function toggleMedia(mediaType) {
 
         // Panggil saat player dimulai
         requestAnimationFrame(updateProgress);
-
-        // Menampilkan konten halaman setelah player siap
-        const audioVideo = document.getElementById("audio-video");
-        audioVideo.classList.remove("hidden");
 
         // Mengatur event listener untuk tombol play-pause
         const playPauseButton = document.getElementById("play-pause");
@@ -125,6 +121,10 @@ function toggleMedia(mediaType) {
         // Memperbarui total durasi video
         updateTotalDuration();
 
+        // Menampilkan konten halaman setelah player siap
+        const audioVideo = document.getElementById("audio-video");
+        audioVideo.classList.remove("hidden");
+
         // Memperbarui waktu saat ini dan progress bar setiap detik
         setInterval(updateCurrentTimeAndProgressBarAndHandle, 1000);
     }
@@ -140,6 +140,11 @@ function toggleMedia(mediaType) {
     }
 
     function togglePlayPause() {
+        if (!player || typeof player.getPlayerState !== "function") {
+            console.log("Player belum siap");
+            location.reload();
+        }
+
         const playPauseButton = document.getElementById("play-pause");
         console.log("Button clicked, player state:", player.getPlayerState());
         if (player.getPlayerState() === YT.PlayerState.PLAYING) {
@@ -150,12 +155,21 @@ function toggleMedia(mediaType) {
     }
     // Fungsi untuk memundurkan atau memajukan video
     function seekVideo(seconds) {
+        if (!player || typeof player.getCurrentTime !== "function") {
+            console.log("Player belum siap untuk seek");
+            location.reload();
+        }
+
         const currentTime = player.getCurrentTime();
         player.seekTo(currentTime + seconds, true); // true untuk mengatur pemutaran segera
     }
 
     // Fungsi untuk memperbarui waktu saat ini dan progress bar
     function updateCurrentTimeAndProgressBarAndHandle() {
+        if (!player || typeof player.getCurrentTime !== "function" || typeof player.getDuration !== "function") {
+            console.log("Player belum siap untuk update progress");
+            location.reload();
+        }
         if (!isDragging) {
             // Hanya memperbarui jika tidak sedang drag
             const currentTime = player.getCurrentTime();
@@ -178,6 +192,10 @@ function toggleMedia(mediaType) {
 
     // Fungsi untuk memperbarui total durasi video
     function updateTotalDuration() {
+        if (!player || typeof player.getDuration !== "function") {
+            console.log("Player belum siap untuk durasi");
+            location.reload();
+        }
         const totalDuration = player.getDuration();
         const formattedDuration = formatTime(totalDuration);
         document.getElementById("total-duration").innerHTML = formattedDuration;
