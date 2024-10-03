@@ -6,6 +6,9 @@ module.exports = {
             fontFamily: {
                 popins: ["Poppins", "sans-serif"],
             },
+            padding: {
+                dynamic: "calc(100vh - 52px)",
+            },
         },
     },
     plugins: [],
