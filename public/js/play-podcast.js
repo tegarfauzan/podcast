@@ -224,6 +224,11 @@ function toggleMedia(mediaType) {
         const progressHandle = document.getElementById("progress-handle");
         progressBar.style.width = clickPercentage * 100 + "%";
         progressHandle.style.left = clickPercentage * 100 + "%";
+
+        // Menambahkan event listeners untuk touch
+        progressContainer.addEventListener("touchstart", startDragging);
+        progressContainer.addEventListener("touchmove", dragging);
+        progressContainer.addEventListener("touchend", stopDragging);
     }
 
     // Fungsi untuk mengaktifkan fullscreen
