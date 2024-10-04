@@ -24,3 +24,13 @@
 .scroll-invisible {
     scrollbar-width: none; /* Sembunyikan scrollbar */
 }
+
+/* yaitu */
+.plyr {
+    /* Kustomisasi Plyr */
+    @apply rounded-lg shadow-md; /* Tailwind untuk sudut melengkung dan bayangan */
+}
+/* Kustomisasi CSS untuk kontrol jika diperlukan */
+.plyr__controls {
+    /* Sesuaikan kontrol sesuai kebutuhan */
+}
