@@ -49,6 +49,8 @@ function toggleMedia(mediaType) {
     let apiCheckInterval;
     let isDragging = false; // Menandakan apakah sedang menggeser progress
     let wasPlayingBeforeDrag = false; // Menyimpan status apakah video sedang dimainkan sebelum drag
+    let firstLoad = true; // Menandakan apakah ini adalah pertama kali halaman dimuat
+    let currentTimeOnDrag = 0; // Menyimpan posisi waktu ketika dragging untuk melanjutkan dari titik ini
 
     // Fungsi untuk mengecek apakah YouTube API sudah siap
     function checkYouTubeAPIReady() {
@@ -119,9 +121,20 @@ function toggleMedia(mediaType) {
 
         const playPauseButton = document.getElementById("play-pause");
         console.log("Button clicked, player state:", player.getPlayerState());
+
+        // Mencegah autoplay saat halaman pertama kali dimuat
+        if (firstLoad) {
+            firstLoad = false;
+            return;
+        }
+
         if (player.getPlayerState() === YT.PlayerState.PLAYING) {
             player.pauseVideo();
         } else {
+            // Jika sedang di-drag, lanjutkan video dari posisi drag
+            if (isDragging) {
+                player.seekTo(currentTimeOnDrag, true); // Mulai dari posisi yang di-drag
+            }
             player.playVideo();
         }
     }
@@ -177,10 +190,7 @@ function toggleMedia(mediaType) {
         isDragging = true;
         wasPlayingBeforeDrag = player.getPlayerState() === YT.PlayerState.PLAYING; // Simpan status sebelum drag
 
-        if (wasPlayingBeforeDrag) {
-            player.pauseVideo(); // Pause video saat mulai drag jika sedang diputar
-        }
-
+        // Jangan menjeda video saat drag, biarkan tetap play jika sedang play
         seekOnDrag(event); // Panggil fungsi untuk mengubah progress saat mulai drag
     }
 
@@ -197,9 +207,9 @@ function toggleMedia(mediaType) {
             seekOnDrag(event);
             isDragging = false;
 
-            // Setelah drag selesai, kembalikan status play/pause sesuai sebelum drag
+            // Jika video sebelumnya sedang diputar, lanjutkan play setelah drag selesai
             if (wasPlayingBeforeDrag) {
-                player.playVideo(); // Hanya mainkan lagi jika sebelumnya diputar
+                player.playVideo();
             }
         }
     }
@@ -223,6 +233,9 @@ function toggleMedia(mediaType) {
         // Memperbarui waktu current-time
         const formattedTime = formatTime(newTime);
         document.getElementById("current-time").innerHTML = formattedTime;
+
+        // Simpan posisi waktu selama dragging untuk dilanjutkan saat play
+        currentTimeOnDrag = newTime;
     }
 
     // Fungsi untuk mengaktifkan fullscreen
