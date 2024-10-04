@@ -8,6 +8,8 @@ const previousButton = document.getElementById("previous");
 const nextButton = document.getElementById("next");
 const downloadButton = document.getElementById("download");
 const continueButton = document.getElementById("continue");
+const toggleEpisodes = document.getElementById("toggle-episodes");
+const otherEpisodes = document.getElementById("other-episodes");
 let repeatDisabled = false; // Untuk melacak apakah repeat dinonaktifkan atau tidak
 
 // TABS
@@ -46,7 +48,6 @@ function toggleMedia(mediaType) {
     let player;
     let apiCheckInterval;
     let isDragging = false; // Menandakan apakah sedang menggeser progress
-    let continueButtonClicked = false; // Menandakan apakah tombol continue diklik
 
     // Fungsi untuk mengecek apakah YouTube API sudah siap
     function checkYouTubeAPIReady() {
@@ -64,7 +65,6 @@ function toggleMedia(mediaType) {
         player = new YT.Player("video-player", {
             events: {
                 onReady: onPlayerReady,
-                onStateChange: onPlayerStateChange, // Tambahkan event listener untuk state change
             },
         });
     }
@@ -99,19 +99,6 @@ function toggleMedia(mediaType) {
             seekVideo(10); // Maju 10 detik
         });
 
-        // Mengatur event listener untuk tombol continue
-        const continueButton = document.getElementById("continue");
-        continueButton.addEventListener("click", function () {
-            continueButtonClicked = !continueButtonClicked; // Toggle state
-            if (continueButtonClicked) {
-                continueButton.classList.add("opacity-100"); // Tambahkan kelas opacity
-                continueButton.classList.remove("opacity-0"); // Tambahkan kelas opacity
-            } else {
-                continueButton.classList.remove("opacity-100"); // Hapus kelas opacity
-                continueButton.classList.add("opacity-0"); // Tambahkan kelas opacity
-            }
-        });
-
         // Mengatur event listener untuk progress bar click dan drag
         const progressContainer = document.getElementById("progress-container");
         progressContainer.addEventListener("mousedown", startDragging);
@@ -127,16 +114,6 @@ function toggleMedia(mediaType) {
 
         // Memperbarui waktu saat ini dan progress bar setiap detik
         setInterval(updateCurrentTimeAndProgressBarAndHandle, 1000);
-    }
-
-    function onPlayerStateChange(event) {
-        // Jika video mencapai akhir
-        if (event.data === YT.PlayerState.ENDED) {
-            if (!continueButtonClicked) {
-                player.seekTo(0); // Kembali ke awal video
-                player.playVideo(); // Memulai pemutaran lagi
-            }
-        }
     }
 
     function togglePlayPause() {
@@ -277,81 +254,13 @@ function toggleMedia(mediaType) {
     apiCheckInterval = setInterval(checkYouTubeAPIReady, 1000);
 }
 
-// LOGIKA OTHER EPISODES
-const otherEpisodes = document.getElementById("other-episodes");
-let isDragging = false;
-let startY;
-let initialOffset;
-const maxTopOffset = window.innerHeight - 388; // Batas maksimal posisi top (window height - 388px)
-const minBottomOffset = window.innerHeight - 52; // Batas minimal posisi top (-bottom-[336px])
-
-// Fungsi untuk memulai drag
-function startDrag(e) {
-    isDragging = true;
-    startY = e.touches ? e.touches[0].clientY : e.clientY; // Dapatkan posisi sentuhan atau mouse
-    initialOffset = otherEpisodes.offsetTop; // posisi awal elemen
-    otherEpisodes.style.transition = "none"; // hentikan animasi
-}
-
-// Ketika mouse di-klik (mulai drag)
-otherEpisodes.addEventListener("mousedown", startDrag);
-
-// Ketika sentuhan dimulai
-otherEpisodes.addEventListener("touchstart", startDrag);
-
-// Ketika mouse bergerak (saat drag)
-document.addEventListener("mousemove", (e) => {
-    if (isDragging) {
-        const deltaY = e.clientY - startY;
-        let newOffset = initialOffset + deltaY;
-
-        // Batasi pergerakan hanya sampai batas maksimal (388px dari bawah)
-        if (newOffset < maxTopOffset) {
-            newOffset = maxTopOffset; // set agar tidak lebih tinggi dari batas maksimal
-        }
-
-        // Batasi pergerakan kebawah hanya sampai -bottom-[336px]
-        if (newOffset > minBottomOffset) {
-            newOffset = minBottomOffset; // set agar tidak lebih rendah dari batas minimal
-        }
-
-        otherEpisodes.style.top = `${newOffset}px`; // geser elemen secara vertikal
-    }
-});
-
-// Ketika sentuhan bergerak (saat drag)
-document.addEventListener("touchmove", (e) => {
-    if (isDragging) {
-        const deltaY = e.touches[0].clientY - startY; // Dapatkan perubahan posisi sentuhan
-        let newOffset = initialOffset + deltaY;
-
-        // Batasi pergerakan hanya sampai batas maksimal (388px dari bawah)
-        if (newOffset < maxTopOffset) {
-            newOffset = maxTopOffset; // set agar tidak lebih tinggi dari batas maksimal
-        }
-
-        // Batasi pergerakan kebawah hanya sampai -bottom-[336px]
-        if (newOffset > minBottomOffset) {
-            newOffset = minBottomOffset; // set agar tidak lebih rendah dari batas minimal
-        }
-
-        otherEpisodes.style.top = `${newOffset}px`; // geser elemen secara vertikal
-        e.preventDefault(); // Mencegah scrolling saat drag
-    }
-});
-
-// Ketika mouse dilepaskan (akhir drag)
-document.addEventListener("mouseup", () => {
-    if (isDragging) {
-        isDragging = false;
-        otherEpisodes.style.transition = "top 0.3s"; // tambahkan kembali animasi jika dibutuhkan
-    }
-});
-
-// Ketika sentuhan dilepaskan (akhir drag)
-document.addEventListener("touchend", () => {
-    if (isDragging) {
-        isDragging = false;
-        otherEpisodes.style.transition = "top 0.3s"; // tambahkan kembali animasi jika dibutuhkan
+// // LOGIKA OTHER EPISODES
+toggleEpisodes.addEventListener("click", function () {
+    if (otherEpisodes.classList.contains("-bottom-[336px]")) {
+        otherEpisodes.classList.remove("-bottom-[336px]");
+        otherEpisodes.classList.add("bottom-0");
+    } else if (otherEpisodes.classList.contains("bottom-0")) {
+        otherEpisodes.classList.remove("bottom-0");
+        otherEpisodes.classList.add("-bottom-[336px]");
     }
 });
