@@ -8,7 +8,6 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet" />
         <link href="./css/output.css" rel="stylesheet" />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider@15.7.0/dist/nouislider.min.css" />
         <title>Play</title>
     </head>
     <body>
@@ -43,18 +42,13 @@
                             <section id="audio-controls">
                                 <div id="audio-time" class="mb-2 flex items-center justify-between">
                                     <span id="audio-current-time" class="text-[13px] font-medium leading-5 text-[#1C1818]">00:00</span>
-                                    <span id="audio-total-time" class="text-[13px] font-medium leading-5 text-[#1C1818]">00:00</span>
+                                    <span id="audio-total-time" class="text-[13px] font-medium leading-5 text-[#1C1818]"></span>
                                 </div>
                                 <div id="audio-progress" class="relative mb-5 flex h-3 w-full items-center">
                                     <audio id="audio-element" preload="metadata">
                                         <source src="assets/audio/audio.mp3" type="audio/mp3" />
                                     </audio>
                                     <input type="range" id="audio-seek-bar" value="0" min="0" step="1" />
-                                    <!-- <div id="audio-progress-die" class="h-[6px] w-full cursor-pointer rounded-full bg-[rgba(110,142,41,0.2)]">
-                                        <div id="audio-progress-play" class="relative z-10 h-[6px] w-0 rounded-full bg-[#6E8E29]">
-                                            <div id="audio-progress-handle" class="absolute bottom-1/2 right-0 z-20 h-3 w-3 translate-y-1/2 rounded-full border-[1.5px] border-[#6E8E29] bg-[#FFFFFF]"></div>
-                                        </div>
-                                    </div> -->
                                 </div>
                                 <div id="audio-control" class="flex items-center justify-around">
                                     <button type="button" class="relative">
@@ -222,7 +216,6 @@
                 </div>
             </section>
         </main>
-        <script></script>
         <script src="js/play-podcast.js"></script>
     </body>
 </html>

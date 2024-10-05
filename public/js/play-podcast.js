@@ -40,14 +40,14 @@ audioElement.addEventListener("loadedmetadata", () => {
     audioSeekBar.max = Math.floor(audioElement.duration);
     const minutes = Math.floor(audioSeekBar.max / 60);
     const secs = Math.floor(audioSeekBar.max % 60);
-    const formatTime = `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
+    const formatTime = `${minutes < 10 ? "0" : ""}${minutes}:${secs < 10 ? "0" : ""}${secs}`;
     audioTotalTime.textContent = formatTime;
 });
 audioElement.addEventListener("timeupdate", () => {
     audioSeekBar.value = Math.floor(audioElement.currentTime);
     const minutes = Math.floor(audioSeekBar.value / 60);
     const secs = Math.floor(audioSeekBar.value % 60);
-    const formatTime = `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
+    const formatTime = `${minutes < 10 ? "0" : ""}${minutes}:${secs < 10 ? "0" : ""}${secs}`;
     audioCurrentTime.textContent = formatTime;
     const percentage = (audioSeekBar.value / audioSeekBar.max) * 100;
     audioSeekBar.style.background = `linear-gradient(to right, #6E8E29 ${percentage}%, rgba(110, 142, 41, 0.2) ${percentage}%)`;
@@ -82,9 +82,7 @@ audioDownload.addEventListener("click", () => {
     document.body.removeChild(link); // Hapus link setelah diunduh
 });
 
-
 // VIDEO CONTROLS
-
 
 // LOGIKA OTHER EPISODES
 const toggleEpisodes = document.getElementById("toggle-episodes");
