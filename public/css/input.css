@@ -25,12 +25,36 @@
     scrollbar-width: none; /* Sembunyikan scrollbar */
 }
 
-/* yaitu */
-.plyr {
-    /* Kustomisasi Plyr */
-    @apply rounded-lg shadow-md; /* Tailwind untuk sudut melengkung dan bayangan */
+/* .active {
+    @apply bg-[#4E0F08] text-[#FFFFFF];
+} */
+
+/* Tambahkan ini di file CSS Anda atau dalam tag <style> */
+input[type="range"] {
+    -webkit-appearance: none; /* Menghilangkan gaya default pada browser berbasis Webkit */
+    appearance: none; /* Menghilangkan gaya default */
+    width: 100%; /* Atur lebar slider */
+    height: 6px; /* Tinggi track slider */
+    background: rgba(110, 142, 41, 0.2); /* Ganti warna latar belakang */
+    border-radius: 20px; /* Sudut yang melengkung */
 }
-/* Kustomisasi CSS untuk kontrol jika diperlukan */
-.plyr__controls {
-    /* Sesuaikan kontrol sesuai kebutuhan */
+
+/* Gaya untuk thumb slider */
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; /* Menghilangkan gaya default pada browser berbasis Webkit */
+    appearance: none; /* Menghilangkan gaya default */
+    width: 12px; /* Lebar thumb */
+    height: 12px; /* Tinggi thumb */
+    border-radius: 50%; /* Bentuk bulat */
+    background: white; /* Ganti warna thumb */
+    cursor: pointer; /* Pointer saat hover */
+    border: 1.5px solid #6e8e29;
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 12px; /* Lebar thumb */
+    height: 12px; /* Tinggi thumb */
+    border-radius: 50%; /* Bentuk bulat */
+    background: white; /* Ganti warna thumb */
+    cursor: pointer; /* Pointer saat hover */
 }

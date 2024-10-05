@@ -3,84 +3,27 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Custom Plyr Audio</title>
-        <!-- Plyr CSS -->
-        <link rel="stylesheet" href="https://cdn.plyr.io/3.7.2/plyr.css" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@plyr/plyr@3.8.8/dist/plyr.css" />
         <style>
-            /* Custom styling for the audio player */
-            #audio-player-container {
-                max-width: 400px;
-                margin: 0 auto;
-            }
-
-            .plyr--audio .plyr__controls {
-                flex-direction: column; /* Stack controls vertically */
-                background-color: #333;
-                border-radius: 10px;
-            }
-
             .plyr__control {
-                color: #fff !important;
+                background-color: #1c1818; /* Ganti warna latar belakang kontrol */
+                color: #ffffff; /* Ganti warna teks kontrol */
             }
 
-            /* Center the play button */
-            .plyr__controls button.plyr__control--overlaid {
-                position: static;
-                margin: 10px auto;
-            }
-
-            /* Progress bar customization */
-            .plyr__progress__container {
-                height: 6px; /* Adjust the height of the progress bar */
-            }
-
-            /* Background of the progress bar */
-            .plyr__progress__container .plyr__progress {
-                background-color: rgba(110, 142, 41, 0.2); /* Custom background color */
-            }
-
-            /* Played progress color */
-            .plyr__progress__container .plyr__progress__played {
-                background-color: #6e8e29 !important; /* Played portion color */
-            }
-
-            /* Buffered progress color */
-            .plyr__progress__container .plyr__progress__buffer {
-                background-color: rgba(110, 142, 41, 0.4); /* Buffered portion color */
-            }
-
-            /* Handle (circle) color */
-            .plyr__progress__handle {
-                background-color: #ffffff !important; /* White color for the handle */
-                border: 1.5px solid #6e8e29; /* Add border to the handle */
-            }
-
-            .plyr__progress__handle:hover {
-                background-color: #6e8e29 !important; /* Change handle color on hover */
+            .plyr__control[data-plyr="play"] {
+                background: url("assets/play/icons/play.svg") no-repeat center center; /* Ganti ikon play */
             }
         </style>
+        <title>Document</title>
     </head>
     <body>
-        <div id="audio-player-container">
-            <!-- Audio element -->
-            <audio id="audio-element" class="plyr__audio" controls>
-                <source src="audio.mp3" type="audio/mp3" />
-                Your browser does not support the audio element.
-            </audio>
-        </div>
-
-        <!-- Plyr JS -->
-        <script src="https://cdn.plyr.io/3.7.2/plyr.js"></script>
+        <div id="player" data-plyr-provider="youtube" data-plyr-embed-id="Q2qVPTdywaA"></div>
+        <!-- Gunakan ID video -->
+        <script src="https://cdn.jsdelivr.net/npm/@plyr/plyr@3.8.8/dist/plyr.polyfilled.js"></script>
         <script>
-            // Initialize Plyr with custom configuration
-            document.addEventListener("DOMContentLoaded", () => {
-                const audioPlayer = new Plyr("#audio-element", {
-                    controls: ["progress", "play", "current-time", "mute", "volume"],
-                    volume: 0.5, // Default volume (50%)
-                    muted: false, // Not muted by default
-                    speed: { selected: 1, options: [0.5, 1, 1.5, 2] }, // Custom playback speed options
-                    tooltips: { controls: true }, // Show tooltips on controls
-                    iconUrl: "https://cdn.plyr.io/3.7.2/plyr.svg", // Custom SVG icon set
+            document.addEventListener("DOMContentLoaded", function () {
+                const player = new Plyr("#player", {
+                    controls: ["play", "rewind", "fast-forward", "progress", "current-time", "mute", "volume", "fullscreen"],
                 });
             });
         </script>
