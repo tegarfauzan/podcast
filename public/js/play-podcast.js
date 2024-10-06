@@ -63,42 +63,40 @@ audioPlayPause.addEventListener("click", () => {
 
 // MUNDUR 10 DETIK
 audioPrevious.addEventListener("click", () => {
-    audioElement.currentTime = Math.max(audioElement.currentTime - 10, 0); // Tidak boleh kurang dari 0
+    audioElement.currentTime = Math.max(audioElement.currentTime - 10, 0);
 });
 
 // AUDIO MAJU 10 DETIK
 audioNext.addEventListener("click", () => {
-    audioElement.currentTime = Math.min(audioElement.currentTime + 10, audioElement.duration); // Tidak boleh lebih dari durasi audio
+    audioElement.currentTime = Math.min(audioElement.currentTime + 10, audioElement.duration);
 });
 // AUDIO DOWNLOAD
 audioDownload.addEventListener("click", function () {
-    const audioSrc = audioElement.src; //src ngambil dari audio
-    const downloadLink = document.createElement("a"); // Membuat elemen <a>
-    downloadLink.href = audioSrc; // Mengatur link unduhan sesuai dengan source audio
-    downloadLink.download = "audio.mp3"; // Nama default untuk file yang diunduh
-    downloadLink.click(); // Menjalankan klik otomatis untuk memulai unduhan
+    const audioSrc = audioElement.src;
+    const downloadLink = document.createElement("a");
+    downloadLink.href = audioSrc;
+    downloadLink.download = "audio.mp3";
+    downloadLink.click();
 });
 
 // VIDEO CONTROLS
 let player;
-// Fungsi untuk memformat waktu menjadi 00:00
 function formatTime(time) {
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
     return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
 }
 
-// Load YouTube IFrame API secara asynchronous
 function onYouTubeIframeAPIReady() {
     player = new YT.Player("player", {
         height: "100%",
         width: "100%",
-        videoId: "Q2qVPTdywaA", // Ganti dengan ID video YouTube yang diinginkan
+        videoId: "Q2qVPTdywaA",
         playerVars: {
-            controls: 0, // Menghilangkan kontrol default
-            modestbranding: 1, // Menghilangkan logo YouTube
-            rel: 0, // Menghilangkan video terkait setelah video selesai
-            showinfo: 0, // Menyembunyikan informasi video
+            controls: 0,
+            modestbranding: 1,
+            rel: 0,
+            showinfo: 0,
         },
         events: {
             onReady: onPlayerReady,
@@ -107,65 +105,49 @@ function onYouTubeIframeAPIReady() {
     });
 }
 
-// Fungsi untuk memperbarui waktu dan seek bar
 function updateTimeAndSeekBar() {
     const videoCurrentTime = document.getElementById("video-current-time");
     const videoTotalTime = document.getElementById("video-total-time");
     const videoSeekBar = document.getElementById("video-seek-bar");
 
-    // Fungsi untuk memperbarui background seek bar
     function updateSeekBarColor(percentage) {
         videoSeekBar.style.background = `linear-gradient(to right, #6E8E29 ${percentage}%, rgba(110, 142, 41, 0.2) ${percentage}%)`;
     }
 
-    // Update waktu dan seek bar setiap detik
     setInterval(() => {
         const currentTime = player.getCurrentTime();
         const duration = player.getDuration();
 
-        // Memperbarui teks waktu
         videoCurrentTime.textContent = formatTime(currentTime);
         videoTotalTime.textContent = formatTime(duration);
 
-        // Memperbarui seek bar
         const percentage = (currentTime / duration) * 100;
         videoSeekBar.value = percentage;
 
-        // Perbarui warna seek bar
         updateSeekBarColor(percentage);
-    }, 1000); // Update setiap detik
+    }, 1000);
 
-    // Event listener untuk ketika pengguna menggeser seek bar
     videoSeekBar.addEventListener("input", (e) => {
         const duration = player.getDuration();
         const seekPercentage = e.target.value;
-
-        // Hitung waktu berdasarkan persentase seek bar
         const newTime = (seekPercentage / 100) * duration;
-
-        // Memperbarui waktu video sesuai dengan posisi seek bar
         player.seekTo(newTime);
-
-        // Perbarui warna seek bar secara realtime
         updateSeekBarColor(seekPercentage);
-
-        // Memperbarui teks waktu sesuai dengan posisi baru
         videoCurrentTime.textContent = formatTime(newTime);
     });
 }
 
-// Ketika player sudah siap
 function onPlayerReady(event) {
     const videoPlayPauseButton = document.getElementById("video-play-pause");
     const videoPreviousButton = document.getElementById("video-previous");
     const videoNextButton = document.getElementById("video-next");
     const videoSeekBar = document.getElementById("video-seek-bar");
+    const fullscreenButton = document.getElementById("fullscreen");
+    const videoContainer = document.getElementById("player");
 
-    // Set total waktu ketika video siap
     const videoTotalTime = document.getElementById("video-total-time");
     videoTotalTime.textContent = formatTime(player.getDuration());
 
-    // Event listener untuk play/pause
     videoPlayPauseButton.addEventListener("click", () => {
         const playerState = player.getPlayerState();
         if (playerState === YT.PlayerState.PLAYING) {
@@ -175,30 +157,48 @@ function onPlayerReady(event) {
         }
     });
 
-    // Event listener untuk previous (mundur 10 detik)
     videoPreviousButton.addEventListener("click", () => {
         const currentTime = player.getCurrentTime();
         player.seekTo(Math.max(currentTime - 10, 0));
     });
 
-    // Event listener untuk next (maju 10 detik)
     videoNextButton.addEventListener("click", () => {
         const currentTime = player.getCurrentTime();
         const duration = player.getDuration();
         player.seekTo(Math.min(currentTime + 10, duration));
     });
 
-    // Event listener untuk seek bar
     videoSeekBar.addEventListener("input", () => {
         const seekToTime = (videoSeekBar.value / 100) * player.getDuration();
         player.seekTo(seekToTime);
     });
 
-    // Mulai update waktu dan seekbar
+    fullscreenButton.addEventListener("click", () => {
+        if (!document.fullscreenElement) {
+            if (videoContainer.requestFullscreen) {
+                videoContainer.requestFullscreen();
+            } else if (videoContainer.mozRequestFullScreen) {
+                videoContainer.mozRequestFullScreen();
+            } else if (videoContainer.webkitRequestFullscreen) {
+                videoContainer.webkitRequestFullscreen();
+            } else if (videoContainer.msRequestFullscreen) {
+                videoContainer.msRequestFullscreen();
+            }
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+            }
+        }
+    });
     updateTimeAndSeekBar();
 }
 
-// State change handler (tidak digunakan di sini tapi diperlukan untuk event binding)
 function onPlayerStateChange(event) {
     // Logic tambahan bisa ditambahkan di sini jika diperlukan
 }
