@@ -36,6 +36,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const audioNext = document.getElementById("audio-next");
     const audioDownload = document.getElementById("audio-download");
 
+    // Memastikan elemen audio di-reset setiap kali halaman dimuat
+    audioElement.load();
+
     // AUDIO PROGRESS BAR
     function updateTotalTime() {
         const duration = Math.floor(audioElement.duration);
@@ -67,7 +70,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // AUDIO PLAY/PAUSE
     audioPlayPause.addEventListener("click", () => {
-        audioElement.paused ? audioElement.play() : audioElement.pause();
+        if (audioElement.paused) {
+            audioElement.play();
+        } else {
+            audioElement.pause();
+        }
     });
 
     // MUNDUR 10 DETIK
