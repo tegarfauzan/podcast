@@ -133,7 +133,7 @@ function updateTimeAndSeekBar() {
 
         // Perbarui warna seek bar
         updateSeekBarColor(percentage);
-    }, 10); // Update setiap detik
+    }, 1000); // Update setiap detik
 
     // Event listener untuk ketika pengguna menggeser seek bar
     videoSeekBar.addEventListener("input", (e) => {
@@ -215,4 +215,3 @@ toggleEpisodes.addEventListener("click", function () {
         otherEpisodes.classList.add("-bottom-[336px]");
     }
 });
-// Q2qVPTdywaA
