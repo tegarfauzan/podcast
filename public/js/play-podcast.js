@@ -72,6 +72,7 @@ document.addEventListener("DOMContentLoaded", function () {
     audioPlayPause.addEventListener("click", () => {
         if (audioElement.paused) {
             audioElement.play();
+            player.pauseVideo();
         } else {
             audioElement.pause();
         }
@@ -167,11 +168,13 @@ function onPlayerReady(event) {
     videoTotalTime.textContent = formatTime(player.getDuration());
 
     videoPlayPauseButton.addEventListener("click", () => {
+        const audioElement = document.getElementById("audio-element");
         const playerState = player.getPlayerState();
         if (playerState === YT.PlayerState.PLAYING) {
             player.pauseVideo();
         } else {
             player.playVideo();
+            audioElement.pause();
         }
     });
 
