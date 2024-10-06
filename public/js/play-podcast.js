@@ -81,7 +81,6 @@ audioDownload.addEventListener("click", function () {
 
 // VIDEO CONTROLS
 let player;
-
 // Fungsi untuk memformat waktu menjadi 00:00
 function formatTime(time) {
     const minutes = Math.floor(time / 60);
@@ -114,7 +113,12 @@ function updateTimeAndSeekBar() {
     const videoTotalTime = document.getElementById("video-total-time");
     const videoSeekBar = document.getElementById("video-seek-bar");
 
-    // Update waktu setiap detik
+    // Fungsi untuk memperbarui background seek bar
+    function updateSeekBarColor(percentage) {
+        videoSeekBar.style.background = `linear-gradient(to right, #6E8E29 ${percentage}%, rgba(110, 142, 41, 0.2) ${percentage}%)`;
+    }
+
+    // Update waktu dan seek bar setiap detik
     setInterval(() => {
         const currentTime = player.getCurrentTime();
         const duration = player.getDuration();
@@ -124,15 +128,30 @@ function updateTimeAndSeekBar() {
         videoTotalTime.textContent = formatTime(duration);
 
         // Memperbarui seek bar
-        // Hitung persentase
         const percentage = (currentTime / duration) * 100;
-
-        // Memperbarui seek bar
         videoSeekBar.value = percentage;
 
-        // Mengatur background dengan linear-gradient
-        videoSeekBar.style.background = `linear-gradient(to right, #6E8E29 ${percentage}%, rgba(110, 142, 41, 0.2) ${percentage}%)`;
-    }, 1000); // Update setiap detik
+        // Perbarui warna seek bar
+        updateSeekBarColor(percentage);
+    }, 10); // Update setiap detik
+
+    // Event listener untuk ketika pengguna menggeser seek bar
+    videoSeekBar.addEventListener("input", (e) => {
+        const duration = player.getDuration();
+        const seekPercentage = e.target.value;
+
+        // Hitung waktu berdasarkan persentase seek bar
+        const newTime = (seekPercentage / 100) * duration;
+
+        // Memperbarui waktu video sesuai dengan posisi seek bar
+        player.seekTo(newTime);
+
+        // Perbarui warna seek bar secara realtime
+        updateSeekBarColor(seekPercentage);
+
+        // Memperbarui teks waktu sesuai dengan posisi baru
+        videoCurrentTime.textContent = formatTime(newTime);
+    });
 }
 
 // Ketika player sudah siap
