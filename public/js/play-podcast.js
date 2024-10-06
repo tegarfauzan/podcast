@@ -106,7 +106,20 @@ function formatTime(time) {
     return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
 }
 
+// Cek apakah YouTube IFrame API sudah ada atau belum
+if (typeof YT === "undefined" || typeof YT.Player === "undefined") {
+    const tag = document.createElement("script");
+    tag.src = "https://www.youtube.com/iframe_api";
+    const firstScriptTag = document.getElementsByTagName("script")[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+} else {
+    onYouTubeIframeAPIReady(); // Panggil langsung jika API sudah siap
+}
+
 function onYouTubeIframeAPIReady() {
+    if (player && typeof player.destroy === "function") {
+        player.destroy(); // Reset player jika sudah ada
+    }
     player = new YT.Player("player", {
         height: "100%",
         width: "100%",
